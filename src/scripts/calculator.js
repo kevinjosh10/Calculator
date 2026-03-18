@@ -220,9 +220,12 @@ class UltimateCalculator {
     // Copy to clipboard
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const resultElement = e.target.closest('.tool-result, .converter-result').querySelector('.tool-result-value, .converter-result-value');
-        if (resultElement) {
-          this.copyToClipboard(resultElement.textContent);
+        const targetId = e.target.dataset.copyTarget;
+        if (targetId) {
+          const resultElement = document.getElementById(targetId);
+          if (resultElement) {
+            this.copyToClipboard(resultElement.textContent);
+          }
         }
       });
     });
