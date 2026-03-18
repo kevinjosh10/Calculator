@@ -246,13 +246,16 @@ class GestureRecognizer {
   setupCanvas(videoWidth, videoHeight) {
     if (!this.canvas) {
       this.canvas = document.getElementById('hand-overlay');
+      console.log('Hand overlay canvas:', this.canvas ? 'found' : 'NOT FOUND');
     }
     if (!this.ctx && this.canvas) {
       this.ctx = this.canvas.getContext('2d');
+      console.log('Canvas context created');
     }
     if (this.canvas) {
       this.canvas.width = videoWidth;
       this.canvas.height = videoHeight;
+      console.log(`Canvas size set to ${videoWidth}x${videoHeight}`);
     }
   }
 }
