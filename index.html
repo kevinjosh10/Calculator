@@ -1,0 +1,406 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate Calculator Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+  <div class="alive-bg">
+    <div class="plasma"></div>
+    <div class="waves">
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+    </div>
+    <div class="particles-layer">
+      <div class="particle" style="top: 20%; left: 15%;"></div>
+      <div class="particle" style="top: 60%; left: 70%;"></div>
+      <div class="particle" style="top: 40%; left: 85%;"></div>
+      <div class="particle" style="top: 80%; left: 25%;"></div>
+      <div class="particle" style="top: 30%; left: 50%;"></div>
+      <div class="particle" style="top: 70%; left: 40%;"></div>
+    </div>
+    
+    <div class="naruto-beam" id="narutoBeam"></div>
+    <div class="flash" id="flash"></div>
+  </div>
+
+  <div class="panel-toggle">
+    <button class="toggle-btn" id="toggleHistory" title="History">📋</button>
+    <button class="toggle-btn" id="toggleConverter" title="Converter">🔄</button>
+    <button class="toggle-btn" id="toggleTools" title="Tools">🧮</button>
+    <button class="toggle-btn" id="toggleSettings" title="Settings">⚙️</button>
+    <button class="toggle-btn" id="toggleCountdown" title="Countdown">⏱️</button>
+  </div>
+
+  <div class="app-container">
+    <div class="calculator">
+      <div class="calc-glow"></div>
+      
+      <div class="calc-header">
+        <div class="calc-title">CALCULATOR</div>
+        <div class="mode-toggle">
+          <button class="mode-btn active" data-mode="basic">BASIC</button>
+          <button class="mode-btn" data-mode="scientific">SCI</button>
+        </div>
+      </div>
+
+      <div class="display" id="display">
+        <div class="memory-indicator" id="memoryIndicator">M</div>
+        <div class="previous-operand" id="previous-operand"></div>
+        <div class="current-operand" id="current-operand">0</div>
+      </div>
+
+      <div class="buttons">
+        <div class="scientific-row" id="scientificRow">
+          <div class="btn-row">
+            <button class="btn sci" data-sci="sin">sin</button>
+            <button class="btn sci" data-sci="cos">cos</button>
+            <button class="btn sci" data-sci="tan">tan</button>
+            <button class="btn sci" data-sci="log">log</button>
+          </div>
+          <div class="btn-row" style="margin-top: 10px;">
+            <button class="btn sci" data-sci="sqrt">√</button>
+            <button class="btn sci" data-sci="pow">x²</button>
+            <button class="btn sci" data-sci="pi">π</button>
+            <button class="btn sci" data-sci="e">e</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn memory" data-mem="MC">MC</button>
+          <button class="btn memory" data-mem="MR">MR</button>
+          <button class="btn memory" data-mem="M+">M+</button>
+          <button class="btn memory" data-mem="M-">M-</button>
+        </div>
+
+        <div class="btn-row" style="margin-top: 10px;">
+          <button class="btn clear" data-action="clear">AC</button>
+          <button class="btn delete" data-action="delete">DEL</button>
+          <button class="btn operator" data-action="percent">%</button>
+          <button class="btn operator" data-action="divide">÷</button>
+        </div>
+
+        <div class="btn-row" style="margin-top: 10px;">
+          <button class="btn btn-num" data-number="7">7</button>
+          <button class="btn btn-num" data-number="8">8</button>
+          <button class="btn btn-num" data-number="9">9</button>
+          <button class="btn operator" data-action="multiply">×</button>
+        </div>
+
+        <div class="btn-row" style="margin-top: 10px;">
+          <button class="btn btn-num" data-number="4">4</button>
+          <button class="btn btn-num" data-number="5">5</button>
+          <button class="btn btn-num" data-number="6">6</button>
+          <button class="btn operator" data-action="subtract">−</button>
+        </div>
+
+        <div class="btn-row" style="margin-top: 10px;">
+          <button class="btn btn-num" data-number="1">1</button>
+          <button class="btn btn-num" data-number="2">2</button>
+          <button class="btn btn-num" data-number="3">3</button>
+          <button class="btn operator" data-action="add">+</button>
+        </div>
+
+        <div class="btn-row" style="margin-top: 10px;">
+          <button class="btn btn-num" data-number="0">0</button>
+          <button class="btn btn-num" data-number=".">.</button>
+          <button class="btn equals" data-action="equals">=</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="panel" id="historyPanel">
+        <div class="panel-header">
+          <div class="panel-title">HISTORY</div>
+          <button class="panel-close" id="closeHistory">×</button>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-empty">No calculations yet</div>
+        </div>
+      </div>
+
+      <div class="panel" id="converterPanel">
+        <div class="panel-header">
+          <div class="panel-title">CONVERTER</div>
+          <button class="panel-close" id="closeConverter">×</button>
+        </div>
+        
+        <div class="converter-type">
+          <button class="converter-btn active" data-type="length">Length</button>
+          <button class="converter-btn" data-type="weight">Weight</button>
+          <button class="converter-btn" data-type="temperature">Temp</button>
+          <button class="converter-btn" data-type="area">Area</button>
+        </div>
+
+        <div class="converter-input-group">
+          <label class="converter-label">From</label>
+          <input type="number" class="converter-input" id="converterInput" placeholder="Enter value">
+          <select class="converter-select" id="fromUnit"></select>
+        </div>
+
+        <div class="converter-input-group">
+          <label class="converter-label">To</label>
+          <select class="converter-select" id="toUnit"></select>
+        </div>
+
+        <div class="converter-result">
+          <div class="converter-result-value" id="converterResult">0</div>
+          <div class="converter-result-unit" id="converterResultUnit"></div>
+        </div>
+      </div>
+
+      <div class="panel" id="toolsPanel">
+        <div class="panel-header">
+          <div class="panel-title">TOOLS</div>
+          <button class="panel-close" id="closeTools">×</button>
+        </div>
+
+        <div class="tools-content">
+          <div class="tool-card active" data-tool="tip">
+            <div class="tool-name">Tip Calculator</div>
+            <div class="tool-desc">Calculate tip and split bill</div>
+          </div>
+          <div class="tool-card" data-tool="loan">
+            <div class="tool-name">Loan Calculator</div>
+            <div class="tool-desc">Calculate loan payments</div>
+          </div>
+          <div class="tool-card" data-tool="bmi">
+            <div class="tool-name">BMI Calculator</div>
+            <div class="tool-desc">Calculate body mass index</div>
+          </div>
+          <div class="tool-card" data-tool="date">
+            <div class="tool-name">Date Calculator</div>
+            <div class="tool-desc">Calculate days between dates</div>
+          </div>
+          <div class="tool-card" data-tool="discount">
+            <div class="tool-name">Discount Calculator</div>
+            <div class="tool-desc">Calculate price after discount</div>
+          </div>
+          <div class="tool-card" data-tool="age">
+            <div class="tool-name">Age Calculator</div>
+            <div class="tool-desc">Calculate age from birthdate</div>
+          </div>
+          <div class="tool-card" data-tool="base">
+            <div class="tool-name">Base Converter</div>
+            <div class="tool-desc">Convert between number bases</div>
+          </div>
+          <div class="tool-card" data-tool="percentchange">
+            <div class="tool-name">Percent Change</div>
+            <div class="tool-desc">Calculate % increase/decrease</div>
+          </div>
+        </div>
+
+        <div class="tip-tool tool-content show">
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="tipAmount" placeholder="Bill amount">
+          </div>
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="tipPercent" placeholder="Tip % (default 15)">
+          </div>
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="tipSplit" placeholder="Split (default 1)">
+          </div>
+          <button class="tool-calculate-btn" id="calculateTip">Calculate</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="tipResult">$0.00</div>
+            <div class="tool-result-label">per person</div>
+          </div>
+        </div>
+
+        <div class="loan-tool tool-content">
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="loanAmount" placeholder="Loan amount">
+          </div>
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="loanRate" placeholder="Interest rate (%)">
+          </div>
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="loanTerm" placeholder="Term (months)">
+          </div>
+          <button class="tool-calculate-btn" id="calculateLoan">Calculate</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="loanResult">$0.00</div>
+            <div class="tool-result-label">per month</div>
+          </div>
+        </div>
+
+        <div class="bmi-tool tool-content">
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="bmiWeight" placeholder="Weight (kg)">
+          </div>
+          <div class="tool-input-group">
+            <input type="number" class="tool-input" id="bmiHeight" placeholder="Height (cm)">
+          </div>
+          <button class="tool-calculate-btn" id="calculateBMI">Calculate</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="bmiResult">0.0</div>
+            <div class="tool-result-label" id="bmiLabel">Normal</div>
+          </div>
+        </div>
+
+        <div class="date-tool tool-content">
+          <div class="tool-input-group">
+            <label class="converter-label">From</label>
+            <input type="date" class="tool-input" id="dateFrom">
+          </div>
+          <div class="tool-input-group">
+            <label class="converter-label">To</label>
+            <input type="date" class="tool-input" id="dateTo">
+          </div>
+          <button class="tool-calculate-btn" id="calculateDate">Calculate</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="dateResult">0</div>
+            <div class="tool-result-label">days</div>
+          </div>
+        </div>
+
+        <div class="discount-tool tool-content">
+          <div class="tool-input-group">
+            <label class="converter-label">Original Price</label>
+            <input type="number" class="tool-input" id="discountOriginalPrice" placeholder="Enter original price">
+          </div>
+          <div class="tool-input-group">
+            <label class="converter-label">Discount Percentage</label>
+            <input type="number" class="tool-input" id="discountPercent" placeholder="Enter discount %">
+          </div>
+          <button class="tool-calculate-btn" id="calculateDiscount">Calculate</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="discountResult">$0.00</div>
+            <div class="tool-result-label">Final Price</div>
+          </div>
+          <div class="tool-result" style="margin-top: 10px; border-color: rgba(255, 102, 0, 0.2);">
+            <div class="tool-result-value" id="discountSavedResult" style="color: var(--orange);">$0.00</div>
+            <div class="tool-result-label">Amount Saved</div>
+          </div>
+          <button class="tool-calculate-btn copy-btn" data-copy-target="discountResult" style="margin-top: 10px; background: linear-gradient(135deg, #ff6600, #ff8800);">Copy Result</button>
+        </div>
+
+        <div class="age-tool tool-content">
+          <div class="tool-input-group">
+            <label class="converter-label">Birth Date</label>
+            <input type="date" class="tool-input" id="ageBirthDate">
+          </div>
+          <button class="tool-calculate-btn" id="calculateAge">Calculate Age</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="ageResult">0 years</div>
+            <div class="tool-result-label">Current Age</div>
+          </div>
+          <button class="tool-calculate-btn copy-btn" data-copy-target="ageResult" style="margin-top: 10px; background: linear-gradient(135deg, #ff6600, #ff8800);">Copy Result</button>
+        </div>
+
+        <div class="base-tool tool-content">
+          <div class="tool-input-group">
+            <label class="converter-label">Number</label>
+            <input type="text" class="tool-input" id="baseNumber" placeholder="Enter number">
+          </div>
+          <div class="tool-input-group">
+            <label class="converter-label">From Base</label>
+            <select class="tool-input" id="fromBase">
+              <option value="2">Binary (2)</option>
+              <option value="8">Octal (8)</option>
+              <option value="10" selected>Decimal (10)</option>
+              <option value="16">Hexadecimal (16)</option>
+            </select>
+          </div>
+          <button class="tool-calculate-btn" id="calculateBase">Convert</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="baseResult" style="font-size: 0.9rem; text-align: left;">Enter a number to convert</div>
+            <div class="tool-result-label">All Base Conversions</div>
+          </div>
+          <button class="tool-calculate-btn copy-btn" data-copy-target="baseResult" style="margin-top: 10px; background: linear-gradient(135deg, #ff6600, #ff8800);">Copy Result</button>
+        </div>
+
+        <div class="percentchange-tool tool-content">
+          <div class="tool-input-group">
+            <label class="converter-label">Original Value</label>
+            <input type="number" class="tool-input" id="percentOriginal" placeholder="Original value">
+          </div>
+          <div class="tool-input-group">
+            <label class="converter-label">Current Value</label>
+            <input type="number" class="tool-input" id="percentCurrent" placeholder="Current value">
+          </div>
+          <button class="tool-calculate-btn" id="calculatePercentChange">Calculate Change</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="percentChangeResult">0%</div>
+            <div class="tool-result-label">Percentage Change</div>
+          </div>
+          <button class="tool-calculate-btn copy-btn" data-copy-target="percentChangeResult" style="margin-top: 10px; background: linear-gradient(135deg, #ff6600, #ff8800);">Copy Result</button>
+        </div>
+      </div>
+
+      <div class="panel" id="settingsPanel">
+        <div class="panel-header">
+          <div class="panel-title">SETTINGS</div>
+          <button class="panel-close" id="closeSettings">×</button>
+        </div>
+
+        <div class="settings-content">
+          <div class="setting-item">
+            <div class="setting-label">Naruto Beam Effect</div>
+            <button class="setting-toggle active" id="settingBeam"></button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">Floating Animation</div>
+            <button class="setting-toggle active" id="settingFloat"></button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">Sound Effects</div>
+            <button class="setting-toggle" id="settingSound"></button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">Auto-save History</div>
+            <button class="setting-toggle active" id="settingAutoSave"></button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">Theme</div>
+            <button class="setting-toggle" id="themeToggle">🌙</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="countdownPanel">
+        <div class="panel-header">
+          <div class="panel-title">COUNTDOWN</div>
+          <button class="panel-close" id="closeCountdown">×</button>
+        </div>
+
+        <div class="countdown-container">
+          <div class="countdown-title">MARCH 16, 2026</div>
+          <div class="countdown-display">
+            <div class="countdown-unit">
+              <div class="countdown-value" id="days">00</div>
+              <div class="countdown-label">Days</div>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="hours">00</div>
+              <div class="countdown-label">Hours</div>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="minutes">00</div>
+              <div class="countdown-label">Min</div>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="seconds">00</div>
+              <div class="countdown-label">Sec</div>
+            </div>
+          </div>
+          <div class="countdown-milliseconds" id="milliseconds">000 ms</div>
+          <div class="countdown-message" id="countdownMessage">
+            <div class="countdown-message-text">🎉 HAPPY BIRTHDAY! 🎉</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/scripts/calculator.js"></script>
+</body>
+</html>
