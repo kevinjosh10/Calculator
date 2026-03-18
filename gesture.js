@@ -105,6 +105,8 @@ class GestureRecognizer {
         // Draw hand landmarks with color coding
         this.drawHandLandmarks(landmarks, handedness);
       });
+      
+      console.log('Total fingers counted:', totalFingers);
     }
 
     // Update confidence based on hand detection

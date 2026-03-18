@@ -48,8 +48,24 @@ class GestureFlowApp {
 
     // Setup gesture canvas dimensions
     const video = this.camera.getVideoElement();
+    console.log('Video element:', video ? 'found' : 'NOT FOUND');
+    
+    // Setup canvas dimensions (call immediately in case metadata already loaded)
     if (video && this.gesture) {
+      const setupCanvasOnce = () => {
+        if (video.videoWidth > 0 && video.videoHeight > 0) {
+          console.log(`Setting up canvas with video dimensions: ${video.videoWidth}x${video.videoHeight}`);
+          this.gesture.setupCanvas(video.videoWidth, video.videoHeight);
+        } else {
+          // Try again later
+          setTimeout(setupCanvasOnce, 100);
+        }
+      };
+      setupCanvasOnce();
+      
+      // Also set up on metadata load
       video.onloadedmetadata = () => {
+        console.log('Video metadata loaded');
         this.gesture.setupCanvas(video.videoWidth, video.videoHeight);
       };
     }
