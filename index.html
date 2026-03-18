@@ -1204,6 +1204,10 @@
             <div class="tool-name">Date Calculator</div>
             <div class="tool-desc">Calculate days between dates</div>
           </div>
+          <div class="tool-card" data-tool="discount">
+            <div class="tool-name">Discount Calculator</div>
+            <div class="tool-desc">Calculate price after discount</div>
+          </div>
         </div>
 
         <div class="tip-tool tool-content show">
@@ -1267,6 +1271,26 @@
           <div class="tool-result">
             <div class="tool-result-value" id="dateResult">0</div>
             <div class="tool-result-label">days</div>
+          </div>
+        </div>
+
+        <div class="discount-tool tool-content">
+          <div class="tool-input-group">
+            <label class="converter-label">Original Price</label>
+            <input type="number" class="tool-input" id="discountOriginalPrice" placeholder="Enter original price">
+          </div>
+          <div class="tool-input-group">
+            <label class="converter-label">Discount Percentage</label>
+            <input type="number" class="tool-input" id="discountPercent" placeholder="Enter discount %">
+          </div>
+          <button class="tool-calculate-btn" id="calculateDiscount">Calculate</button>
+          <div class="tool-result">
+            <div class="tool-result-value" id="discountResult">$0.00</div>
+            <div class="tool-result-label">Final Price</div>
+          </div>
+          <div class="tool-result" style="margin-top: 10px; border-color: rgba(255, 102, 0, 0.2);">
+            <div class="tool-result-value" id="discountSavedResult" style="color: var(--orange);">$0.00</div>
+            <div class="tool-result-label">Amount Saved</div>
           </div>
         </div>
       </div>
@@ -1512,6 +1536,7 @@
         document.getElementById('calculateLoan').addEventListener('click', () => this.calculateLoan());
         document.getElementById('calculateBMI').addEventListener('click', () => this.calculateBMI());
         document.getElementById('calculateDate').addEventListener('click', () => this.calculateDate());
+        document.getElementById('calculateDiscount').addEventListener('click', () => this.calculateDiscount());
 
         document.getElementById('settingBeam').addEventListener('click', (e) => {
           this.settings.beamEnabled = !this.settings.beamEnabled;
@@ -1682,6 +1707,17 @@
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
         document.getElementById('dateResult').textContent = diffDays;
+      }
+
+      calculateDiscount() {
+        const originalPrice = parseFloat(document.getElementById('discountOriginalPrice').value) || 0;
+        const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+        
+        const discountAmount = originalPrice * (discountPercent / 100);
+        const finalPrice = originalPrice - discountAmount;
+        
+        document.getElementById('discountResult').textContent = '$' + finalPrice.toFixed(2);
+        document.getElementById('discountSavedResult').textContent = '$' + discountAmount.toFixed(2);
       }
 
       handleMemory(action) {
