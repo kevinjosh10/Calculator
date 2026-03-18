@@ -83,13 +83,14 @@ class GestureFlowApp {
 
     const video = this.camera.getVideoElement();
 
-    if (video && video.readyState >= 2) {
+    if (video && video.readyState >= 1) {
       // Process frame for gesture detection
       this.gesture.processFrame(video);
       
       // Log once when video is ready
       if (!this.videoReadyLogged) {
         console.log('Video feed ready, processing frames...');
+        console.log('Video readyState:', video.readyState);
         this.videoReadyLogged = true;
       }
 

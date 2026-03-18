@@ -91,6 +91,7 @@ class GestureRecognizer {
     let handCount = 0;
 
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+      console.log('Hands detected:', results.multiHandLandmarks.length);
       handCount = results.multiHandLandmarks.length;
 
       results.multiHandLandmarks.forEach((landmarks, index) => {
