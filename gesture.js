@@ -9,8 +9,8 @@ class GestureRecognizer {
     this.gestureHistory = [];
     this.currentGesture = 0;
     this.confidence = 0;
-    this.canvas = document.getElementById('hand-overlay');
-    this.ctx = this.canvas.getContext('2d');
+    this.canvas = null;
+    this.ctx = null;
     this.lastGestureTime = 0;
     this.gestureDebounce = 100; // ms between gesture changes
   }
@@ -21,16 +21,27 @@ class GestureRecognizer {
   async initialize() {
     try {
       // Load MediaPipe Hands from CDN
+      console.log('Loading MediaPipe Hands...');
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.min.js';
       document.head.appendChild(script);
-      await new Promise(resolve => script.onload = resolve);
+      
+      await new Promise((resolve, reject) => {
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load MediaPipe Hands'));
+      });
+      console.log('MediaPipe Hands loaded');
 
       // Load drawing utils
+      console.log('Loading MediaPipe drawing utils...');
       const drawScript = document.createElement('script');
       drawScript.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.min.js';
       document.head.appendChild(drawScript);
-      await new Promise(resolve => drawScript.onload = resolve);
+      await new Promise((resolve, reject) => {
+        drawScript.onload = resolve;
+        drawScript.onerror = () => reject(new Error('Failed to load drawing utils'));
+      });
+      console.log('MediaPipe drawing utils loaded');
 
       // Initialize MediaPipe Hands
       this.hands = new Hands({
@@ -62,6 +73,8 @@ class GestureRecognizer {
   processFrame(videoElement) {
     if (this.hands && videoElement && videoElement.readyState >= 2) {
       this.hands.send({ image: videoElement });
+    } else if (!this.hands) {
+      console.log('Hands not initialized yet');
     }
   }
 
@@ -69,8 +82,10 @@ class GestureRecognizer {
    * Handle detection results from MediaPipe
    */
   onResults(results) {
-    // Clear canvas
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // Clear canvas (only if canvas exists)
+    if (this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
 
     let totalFingers = 0;
     let handCount = 0;
@@ -154,6 +169,8 @@ class GestureRecognizer {
    * Cyan for right hand, Magenta for left hand
    */
   drawHandLandmarks(landmarks, handedness) {
+    if (!this.ctx || !this.canvas) return;
+    
     const color = handedness === 'Right' ? '#00FFFF' : '#FF33CC';
 
     // Draw connections (landmark pairs)
@@ -227,8 +244,16 @@ class GestureRecognizer {
    * Setup canvas dimensions based on video size
    */
   setupCanvas(videoWidth, videoHeight) {
-    this.canvas.width = videoWidth;
-    this.canvas.height = videoHeight;
+    if (!this.canvas) {
+      this.canvas = document.getElementById('hand-overlay');
+    }
+    if (!this.ctx && this.canvas) {
+      this.ctx = this.canvas.getContext('2d');
+    }
+    if (this.canvas) {
+      this.canvas.width = videoWidth;
+      this.canvas.height = videoHeight;
+    }
   }
 }
 

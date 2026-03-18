@@ -32,7 +32,12 @@ class AudioManager {
    * Play sound for a specific number
    */
   playNumberSound(number) {
-    if (!this.enabled || !this.audioContext) return;
+    if (!this.enabled) return;
+    if (!this.audioContext) {
+      // Try to initialize audio context if not done
+      this.initialize();
+      return;
+    }
 
     // Different frequency for each number (musical notes)
     const frequencies = [

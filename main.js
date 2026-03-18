@@ -30,6 +30,7 @@ class GestureFlowApp {
 
     // Setup particle system first (background)
     const particleCanvas = document.getElementById('particle-canvas');
+    console.log('Particle canvas:', particleCanvas ? 'found' : 'NOT FOUND');
     if (particleCanvas) {
       this.particles = new ParticleSystem(particleCanvas);
       this.particles.init();
@@ -37,7 +38,9 @@ class GestureFlowApp {
     }
 
     // Initialize camera
+    console.log('Initializing camera...');
     const cameraReady = await this.camera.initialize();
+    console.log('Camera ready:', cameraReady);
     if (!cameraReady) {
       this.showError('Camera initialization failed. Please check permissions.');
       return false;
@@ -52,7 +55,9 @@ class GestureFlowApp {
     }
 
     // Initialize gesture recognizer
+    console.log('Initializing gesture recognition...');
     const gestureReady = await this.gesture.initialize();
+    console.log('Gesture ready:', gestureReady);
     if (!gestureReady) {
       this.showError('Gesture recognition initialization failed.');
       return false;
@@ -66,6 +71,7 @@ class GestureFlowApp {
     this.mainLoop();
 
     console.log('GestureFlow initialized successfully');
+    console.log('Main loop started, waiting for camera feed...');
     return true;
   }
 
@@ -80,6 +86,12 @@ class GestureFlowApp {
     if (video && video.readyState >= 2) {
       // Process frame for gesture detection
       this.gesture.processFrame(video);
+      
+      // Log once when video is ready
+      if (!this.videoReadyLogged) {
+        console.log('Video feed ready, processing frames...');
+        this.videoReadyLogged = true;
+      }
 
       // Get current gesture
       const currentGesture = this.gesture.getCurrentGesture();
