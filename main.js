@@ -232,8 +232,14 @@ class GestureFlowApp {
   }
 }
 
-// Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize app when user clicks (required for camera access)
+let appInitialized = false;
+
+function initializeGestureFlow() {
+  if (appInitialized) return;
+  appInitialized = true;
+  
+  console.log('Initializing GestureFlow after user interaction...');
   const app = new GestureFlowApp();
   
   // Store app globally for debugging
@@ -243,8 +249,26 @@ document.addEventListener('DOMContentLoaded', () => {
   app.initialize().then(success => {
     if (success) {
       console.log('GestureFlow ready!');
+      // Remove the click-to-start overlay
+      const overlay = document.getElementById('start-overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
     } else {
       console.error('GestureFlow failed to initialize');
     }
   });
+}
+
+// Initialize on first user interaction (click, touch, or keypress)
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('click', initializeGestureFlow, { once: true });
+  document.addEventListener('touchstart', initializeGestureFlow, { once: true });
+  document.addEventListener('keydown', initializeGestureFlow, { once: true });
+  
+  // Also show a "Click to Start" overlay
+  const overlay = document.getElementById('start-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+  }
 });
